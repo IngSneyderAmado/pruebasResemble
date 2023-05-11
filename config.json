@@ -1,0 +1,23 @@
+{
+    "url":"https://monitor177.github.io/color-palette/",
+    "image1Path": "imagenes/eliminar_post_p3_before.png",
+    "image2Path": "imagenes/eliminar_post_p3.png",
+    "browsers":["chromium", "webkit", "firefox"],
+    "options":{
+        "output": {
+            "errorColor": {
+                "red": 255,
+                "green": 0,
+                "blue": 255
+            },
+            "errorType": "movement",
+            "largeImageThreshold": 1200,
+            "useCrossOrigin": false,
+            "outputDiff": true
+        },
+        "scaleToSameSize": true,
+        "ignore": "antialiasing"
+    },
+    "viewportHeight":600, 
+    "viewportWidth":800
+}
