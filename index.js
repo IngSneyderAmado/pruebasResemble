@@ -6,56 +6,56 @@ const fs = require('fs');
 
 const { viewportHeight, viewportWidth, browsers, options, image1Path, image2Path } = config;
 
-async function executeTest(){
-    if(browsers.length === 0){
+async function executeTest() {
+  if (browsers.length === 0) {
+    return;
+  }
+  let resultInfo = {}
+  let datetime = new Date().toISOString().replace(/:/g, ".");
+  for (b of browsers) {
+    if (!b in ['chromium', 'webkit', 'firefox']) {
       return;
     }
-    let resultInfo = {}
-    let datetime = new Date().toISOString().replace(/:/g,".");
-    for(b of browsers){
-        if(!b in ['chromium', 'webkit', 'firefox']){
-            return;
-        }
-        if (!fs.existsSync(`./results/${datetime}`)){
-            fs.mkdirSync(`./results/${datetime}`, { recursive: true });
-        }
-        //Launch the current browser context
-        const browser = await playwright[b].launch({headless: true, viewport: {width:viewportWidth, height:viewportHeight}});
-        const context = await browser.newContext();
-        const page = await context.newPage(); 
-        await page.goto(config.url);
-        await page.screenshot({ path: `./results/${datetime}/before-${b}.png` });
-        await page.click('#generate');
-        await page.screenshot({ path: `./results/${datetime}/after-${b}.png` });
-        await browser.close();
-        
-        const data = await compareImages(
-            fs.readFileSync(`${image1Path}`),
-            fs.readFileSync(`${image2Path}`),
-            options
-        );
-        resultInfo[b] = {
-            isSameDimensions: data.isSameDimensions,
-            dimensionDifference: data.dimensionDifference,
-            rawMisMatchPercentage: data.rawMisMatchPercentage,
-            misMatchPercentage: data.misMatchPercentage,
-            diffBounds: data.diffBounds,
-            analysisTime: data.analysisTime
-        }
-        fs.writeFileSync(`./results/${datetime}/compare-${b}.png`, data.getBuffer());
-
+    if (!fs.existsSync(`./results/${datetime}`)) {
+      fs.mkdirSync(`./results/${datetime}`, { recursive: true });
     }
-    fs.writeFileSync(`./results/${datetime}/report.html`, createReport(datetime, resultInfo));
-    fs.copyFileSync('./index.css', `./results/${datetime}/index.css`);
+    //Launch the current browser context
+    const browser = await playwright[b].launch({ headless: true, viewport: { width: viewportWidth, height: viewportHeight } });
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto(config.url);
+    await page.screenshot({ path: `./results/${datetime}/before-${b}.png` });
+    await page.click('#generate');
+    await page.screenshot({ path: `./results/${datetime}/after-${b}.png` });
+    await browser.close();
 
-    console.log('------------------------------------------------------------------------------------')
-    console.log("Execution finished. Check the report under the results folder")
-    return resultInfo;  
+    const data = await compareImages(
+      fs.readFileSync(`${image1Path}`),
+      fs.readFileSync(`${image2Path}`),
+      options
+    );
+    resultInfo[b] = {
+      isSameDimensions: data.isSameDimensions,
+      dimensionDifference: data.dimensionDifference,
+      rawMisMatchPercentage: data.rawMisMatchPercentage,
+      misMatchPercentage: data.misMatchPercentage,
+      diffBounds: data.diffBounds,
+      analysisTime: data.analysisTime
+    }
+    fs.writeFileSync(`./results/${datetime}/compare-${b}.png`, data.getBuffer());
+
   }
-(async ()=>console.log(await executeTest()))();
+  fs.writeFileSync(`./results/${datetime}/report.html`, createReport(datetime, resultInfo));
+  fs.copyFileSync('./index.css', `./results/${datetime}/index.css`);
 
-function browser(b, info){
-    return `<div class=" browser" id="test0">
+  console.log('------------------------------------------------------------------------------------')
+  console.log("Execution finished. Check the report under the results folder")
+  return resultInfo;
+}
+(async () => console.log(await executeTest()))();
+
+function browser(b, info) {
+  return `<div class=" browser" id="test0">
     <div class=" btitle">
         <h2>Browser: ${b}</h2>
         <p>Data: ${JSON.stringify(info)}</p>
@@ -79,8 +79,8 @@ function browser(b, info){
   </div>`
 }
 
-function createReport(datetime, resInfo){
-    return `
+function createReport(datetime, resInfo) {
+  return `
     <html>
         <head>
             <title> VRT Report </title>
@@ -92,7 +92,7 @@ function createReport(datetime, resInfo){
             </h1>
             <p>Executed: ${datetime}</p>
             <div id="visualizer">
-                ${config.browsers.map(b=>browser(b, resInfo[b]))}
+                ${config.browsers.map(b => browser(b, resInfo[b]))}
             </div>
         </body>
     </html>`
