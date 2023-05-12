@@ -81,7 +81,7 @@ class Compare {
                 ${folderName}
               </h1>
               <div id="visualizer">
-                  ${config.browsers.map(b => browser(b, resultInfo, images_3_41_1, images_4_44))}
+                  ${this.browsers.map(b => this.browser(b, resultInfo, images_3_41_1, images_4_44))}
               </div>
           </body>
       </html>`
@@ -121,4 +121,4 @@ class Compare {
 }
 
 
-module.exports = new Compare();
+module.exports = Compare;
