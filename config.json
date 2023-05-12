@@ -1,9 +1,10 @@
 {
-    "url":"https://monitor177.github.io/color-palette/",
-    "image1Path": "imagenes/eliminar_post_p3_before.png",
-    "image2Path": "imagenes/eliminar_post_p3.png",
-    "browsers":["chromium", "webkit", "firefox"],
-    "options":{
+    "V3_41_1": "3.41.1",
+    "V4_44": "4.44",
+    "browsers": [
+        "chromium"
+    ],
+    "options": {
         "output": {
             "errorColor": {
                 "red": 255,
@@ -18,6 +19,6 @@
         "scaleToSameSize": true,
         "ignore": "antialiasing"
     },
-    "viewportHeight":600, 
-    "viewportWidth":800
+    "viewportHeight": 600,
+    "viewportWidth": 800
 }
